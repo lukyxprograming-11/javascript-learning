@@ -12,7 +12,7 @@ This repository shows my progress learning JavaScript step by step.
 
 ## Example:
 
-analyzeNumbers([3, 12, 7, 20], 5, transformNumber)
+analyzeNumbers([3, 12, 7, 20], transformNumber)
 
 Result:
 {
