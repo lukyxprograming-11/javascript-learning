@@ -1,17 +1,38 @@
 # JavaScript Learning
 
-This repository shows my progress learning JavaScript step by step.
+This repository tracks my progress in learning JavaScript through practical projects and exercises.
 
-## Skills:
-- loops and conditions
-- arrays
-- filtering and transformations
-- aggregation (sum, count, max, min, average)
-- functions
-- composing functions
+## Current Focus
 
-## Example:
+* Building a Todo App in vanilla JavaScript
+* Understanding application flow: event → state → render → UI
+* Working with array methods (`filter`, `map`, `find`)
+* Managing state and localStorage
 
+## Skills Covered
+
+* loops and conditions
+* arrays and data transformations
+* functions and composition
+* filtering and aggregation (sum, count, average)
+* debugging and problem solving
+
+## Projects
+
+### Todo App (in progress)
+
+Features:
+
+* add todo
+* delete todo
+* toggle completed
+* filter (all / active / completed)
+* clear completed
+* localStorage persistence
+
+## Example (earlier practice)
+
+```js
 analyzeNumbers([3, 12, 7, 20], transformNumber)
 
 Result:
@@ -21,3 +42,9 @@ Result:
   count: 3,
   average: 28.33
 }
+```
+
+## Goal
+
+Move from “it works” → to understanding how and why it works.
+
