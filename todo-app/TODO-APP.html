@@ -1,0 +1,35 @@
+<html lang="cz">
+<head>
+    <meta charset="UTF-8">
+    
+    <title>Todo list</title>
+    <link rel="stylesheet" href="todo-list.css">
+</head>
+<body>
+    <div class="container">
+        <h2>To Do List</h2>
+       
+<input type="text" id="todoInput"> <select id="category">
+    <option value="" disabled selected>Select category</option>
+  <option value="work">Work</option>
+  <option value="home">Home</option>
+  <option value="other">Other</option>
+</select>
+
+<button id="addBtn" class="add-btn">Přidat</button>
+<button id="clearBtn" class="clearBtn">Smazat completed</button>
+
+<div class="filters">
+  <button class="filter-btn" data-filter="all">All</button>
+  <button class="filter-btn" data-filter="active">Active</button>
+  <button class="filter-btn" data-filter="completed">Completed</button>
+</div>
+
+<ul id="todoList"></ul>
+<p id="counter" class="counter"></p>
+    </div>
+
+<script src="TODO-APP2.js"></script>
+
+</body>
+</html>
