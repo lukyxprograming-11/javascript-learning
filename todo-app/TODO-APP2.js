@@ -63,10 +63,16 @@ if(activeBtn){
     activeBtn.classList.add("active")
 }
 
+    const hasCompleted = todos.some(todo => todo.done)
+
+        clearBtn.disabled = !hasCompleted
+
     const complete = todos.filter((todo)=> todo.done)
     const uncomplete = todos.filter((todo)=> !todo.done)
 
     counter.innerHTML= "Uncompleted: " + uncomplete.length + " | Completed: " + complete.length
+
+    
 }
 
 
@@ -89,31 +95,55 @@ input.addEventListener("keydown", function(event){
         render()
     }
 
+    
+
+     
 })
 
 ul.addEventListener("click", function(event){
     if (event.target.tagName === "INPUT") return
 
-    if(event.target.classList.contains("delete-btn")){
+        const deletebtn = event.target.closest(".delete-btn")
+        if(deletebtn){
 
-        const id = Number(event.target.dataset.id)
+           
+
+            const li = event.target.closest("li")
+        if (!li) return
+
+        const id = Number(li.dataset.id)
+        const newtodos = todos.filter(todo => todo.id !== id)
+
         
-        const index = todos.findIndex(todo => todo.id === id)
 
-        if (index !== -1) {
-    todos.splice(index, 1)
-}
+        todos = newtodos
         saveTos()
-
         render()
-        return
-    }
     
+             return
+           
+        }
     
     if(event.target.classList.contains("edit-btn")){
+
+        const inputs = document.querySelectorAll(".edit")
+        inputs.forEach(input =>{
+            input.hidden = true
+        } )
+
+        const texts = document.querySelectorAll(".text")
+            texts.forEach(span =>{
+                span.style.display = ""
+            })
+        
+
     const li = event.target.closest("li")
-    const id = Number(li.dataset.id)
     if (!li) return
+
+
+
+    const id = Number(li.dataset.id)
+    
 
     const span = li.querySelector(".text")
     const input = li.querySelector(".edit")
@@ -133,9 +163,10 @@ ul.addEventListener("click", function(event){
     
    
         const li = event.target.closest("li")
-        if (!li) return
-    
-        const id = Number(li.dataset.id)
+        if(li){
+
+            const id = Number(li.dataset.id)
+            
 
         const todo = todos.find(todo => todo.id === id)
 
@@ -148,31 +179,52 @@ ul.addEventListener("click", function(event){
 
         render()
 
+         return
     
+
+        }   
 })
 
 ul.addEventListener("keydown", function(event){
 
-if (event.target.tagName !== "INPUT") return
+    if (event.target.tagName !== "INPUT") return
 
+    if (event.key === "Enter") {
 
-  if (event.key === "Enter"){
-
-    const li = event.target.closest("li")
+        const li = event.target.closest("li")
     if (!li) return
+
     const id = Number(li.dataset.id)
-    
-    const todo = todos.find(todo => todo.id == id)
+
+    const todo = todos.find(todo => todo.id === id)
+    if (!todo) return
 
     const value = event.target.value
-    if (!todo) return
+    
+
     todo.text = value
 
     saveTos()
+    render()
 
-        render()
+    }
 
-  }
+    if(event.key === "Escape"){
+        
+        const li = event.target.closest("li")
+        if(!li) return 
+
+        const span = li.querySelector(".text")
+        const input = li.querySelector(".edit")
+
+        input.hidden = true
+        span.style.display = ""
+        
+        return
+        console.log("ESC")
+    }
+
+    
 })
 
 filters.addEventListener("click", function(event){
@@ -196,4 +248,9 @@ todos = activeTodos
         saveTos()
         render()
 })
+
+
+
+
+
 
