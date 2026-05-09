@@ -2,6 +2,7 @@
 
 let todos = JSON.parse(localStorage.getItem("todos") || "[]") 
 let currentFilter = "all"
+let searchText = ""
 const addBtn = document.getElementById("addBtn")
 const input = document.getElementById("todoInput")
 const ul = document.getElementById("todoList")
@@ -9,6 +10,8 @@ const counter = document.getElementById("counter")
 const select = document.getElementById("category")
 const filters = document.querySelector(".filters")
 const clearBtn = document.getElementById("clearBtn")
+const dateInput = document.getElementById("date")
+const search = document.getElementById("search")
 
 
 function saveTos(){
@@ -26,13 +29,17 @@ function addTodo(){
 
     const text = input.value.trim()
     const category = select.value.trim()
+    const date = dateInput.value
+    
     
 
     if(text){
 
-        todos.push({id: Date.now(),text: text, done: false, category })
+        todos.push({id: Date.now(),text: text, done: false, category, date })
     }
     input.value=""
+    category.value=""
+    dateInput.value=""
     
 
 }
@@ -49,13 +56,20 @@ let filteredTodos
                                     filteredTodos = todos.filter(todo => todo.done)
                                 }
 
+let searchTodos = filteredTodos.filter(todo => todo.text.toLowerCase().includes(searchText.toLowerCase()))
 
-    ul.innerHTML = filteredTodos.map((todo)=> `<li class="${todo.done? "done" : ""}" data-id="${todo.id}"> 
-                                             <div class="left"><span class="category">${todo.category}</span> <span class="text">${todo.text}</span> <input class="edit" hidden></div> 
+
+    ul.innerHTML = searchTodos.map((todo)=> `<li class="${todo.done? "done" : ""}" data-id="${todo.id}"> 
+                                             <div class="left">${todo.category ? `<span class="category">${todo.category}</span>` : ""} ${todo.date ? `<span class="date">${todo.date}</span>` : ""} <span class="text">${todo.text}</span> <input class="edit" hidden></div> 
                                              <div class="right"> <button class="edit-btn" data-id="${todo.id}">✏️</button> <button class="delete-btn" data-id="${todo.id}">X</button></div> </li>`)
     .join("")
 
-document.querySelectorAll(".filter-btn").forEach(btn =>{btn.classList.remove("active")})
+
+     
+
+
+
+    document.querySelectorAll(".filter-btn").forEach(btn =>{btn.classList.remove("active")})
 
 const activeBtn = document.querySelector(`[data-filter="${currentFilter}"]`)
 
@@ -249,6 +263,14 @@ todos = activeTodos
         render()
 })
 
+
+search.addEventListener("input",function(event){
+
+          searchText= search.value.trim()
+
+        render()
+
+})
 
 
 

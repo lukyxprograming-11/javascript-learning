@@ -9,14 +9,15 @@
     <div class="container">
         <h2>To Do List</h2>
        
-<input type="text" id="todoInput"> <select id="category">
-    <option value="" disabled selected>Select category</option>
+<input placeholder="Zadej úkol" type="text" id="todoInput"> <select id="category"> 
+    <option value="" selected>Select category</option>
   <option value="work">Work</option>
   <option value="home">Home</option>
   <option value="other">Other</option>
-</select>
+</select>   <input type="date" id="date">
 
 <button id="addBtn" class="add-btn">Přidat</button>
+<input placeholder="Vyhledej úkol" type="text" id="search"> 
 <button id="clearBtn" class="clearBtn">Smazat completed</button>
 
 <div class="filters">
