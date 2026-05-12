@@ -14,7 +14,7 @@ ul {
 }
 
 .container {
-    max-width: 515px;
+    max-width: 638px;
     margin: 50px auto;
     padding: 20px;
     background: #2b2b2b;
@@ -39,6 +39,7 @@ li {
 
 
 .add-btn{
+   
     padding: 8px 10px;
     border-radius: 5px;
     border: none;
@@ -104,7 +105,7 @@ form {
 }
 
 input{
-    
+   
     padding: 8px;
     border-radius: 5px;
     border: 1px solid #ccc;
@@ -148,6 +149,7 @@ h2 {
 }
 
 select {
+    
     padding: 8px;
     border-radius: 5px;
     border: 1px solid #ccc;
@@ -201,7 +203,7 @@ select:focus{
 }
 
 .clearBtn{
-
+   
     padding: 8px 10px;
     margin-top: 5px;
     border-radius: 5px;
@@ -224,6 +226,49 @@ select:focus{
 button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+}
+
+.clearsearch{
+    
+    padding: 8px 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: none;
+    background-color: transparent;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    outline: none;
+
+    border: 1px solid rgb(136, 40, 70);
+}
+
+.clearsearch:hover{
+    transform: translateY(-2px);
+    background-color: rgb(136, 40, 70, 0.1);
+}
+
+
+
+.duplicateMessage{
+    padding: 8px 10px;
+    font-size: 14px;
+    border-radius: 10px;
+    border: 1px solid rgb(210, 68, 73);
+    width: fit-content;
+    background-color: rgb(210, 68, 73, 0.1);
+}
+
+.priority{
+
+    margin-right: 8px;
+    background: #12a6b1c8;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: 500;
+    text-transform: capitalize;
+
 }
 
 

@@ -1,8 +1,13 @@
 //TODO APP-2 
 
+//UI state
+
 let todos = JSON.parse(localStorage.getItem("todos") || "[]") 
 let currentFilter = "all"
 let searchText = ""
+
+//DOM references
+
 const addBtn = document.getElementById("addBtn")
 const input = document.getElementById("todoInput")
 const ul = document.getElementById("todoList")
@@ -12,6 +17,10 @@ const filters = document.querySelector(".filters")
 const clearBtn = document.getElementById("clearBtn")
 const dateInput = document.getElementById("date")
 const search = document.getElementById("search")
+const emptyMessage = document.getElementById("emptyMessage")
+const clearsearch = document.getElementById("clearsearch")
+const duplicateMessage = document.getElementById("duplicateMessage")
+const selectPriority = document.getElementById("priority")
 
 
 function saveTos(){
@@ -30,16 +39,22 @@ function addTodo(){
     const text = input.value.trim()
     const category = select.value.trim()
     const date = dateInput.value
+    const priority = selectPriority.value.trim()
     
-    
+           const duplicateTodo = todos.some(todo => todo.text.trim().toLowerCase() === (input.value.trim().toLowerCase()))
+           if(duplicateTodo){
+           
+            return
+           }
 
     if(text){
 
-        todos.push({id: Date.now(),text: text, done: false, category, date })
+        todos.push({id: Date.now(),text: text, done: false, category, date, priority })
     }
     input.value=""
-    category.value=""
+    select.value=""
     dateInput.value=""
+    selectPriority.value=""
     
 
 }
@@ -58,9 +73,29 @@ let filteredTodos
 
 let searchTodos = filteredTodos.filter(todo => todo.text.toLowerCase().includes(searchText.toLowerCase()))
 
+let sortedTodos = searchTodos
+if(currentFilter === "all"){
+        sortedTodos = [...searchTodos].sort((a, b) => a.done - b.done)
+}
 
-    ul.innerHTML = searchTodos.map((todo)=> `<li class="${todo.done? "done" : ""}" data-id="${todo.id}"> 
-                                             <div class="left">${todo.category ? `<span class="category">${todo.category}</span>` : ""} ${todo.date ? `<span class="date">${todo.date}</span>` : ""} <span class="text">${todo.text}</span> <input class="edit" hidden></div> 
+if(searchTodos.length === 0 && searchText !=="" ){
+    emptyMessage.hidden = false 
+}else {
+    emptyMessage.hidden =  true
+}
+
+
+
+
+    let renderTodos = searchTodos
+
+    if(currentFilter === "all"){
+   renderTodos = sortedTodos
+    }
+
+    ul.innerHTML = renderTodos.map((todo)=> `<li class="${todo.done? "done" : ""}" data-id="${todo.id}"> 
+                                             <div class="left"><input type="checkbox" class="checkbox" ${todo.done ? "checked" : ""}> ${todo.category ? `<span class="category">${todo.category}</span>` : ""} 
+                                                ${todo.date ? `<span class="date">${todo.date}</span>` : ""} <span class="text">${todo.text}</span> <input class="edit" hidden> ${todo.priority ? `<span class="priority">${todo.priority}</span>` : ""} </div> 
                                              <div class="right"> <button class="edit-btn" data-id="${todo.id}">✏️</button> <button class="delete-btn" data-id="${todo.id}">X</button></div> </li>`)
     .join("")
 
@@ -79,12 +114,15 @@ if(activeBtn){
 
     const hasCompleted = todos.some(todo => todo.done)
 
-        clearBtn.disabled = !hasCompleted
+    clearBtn.disabled = !hasCompleted
+    clearsearch.disabled = searchText === "" 
+    
+    
 
     const complete = todos.filter((todo)=> todo.done)
     const uncomplete = todos.filter((todo)=> !todo.done)
 
-    counter.innerHTML= "Uncompleted: " + uncomplete.length + " | Completed: " + complete.length
+    counter.innerHTML= "tasks left: " + uncomplete.length + " | Completed: " + complete.length
 
     
 }
@@ -92,6 +130,8 @@ if(activeBtn){
 
 
 render()
+addBtn.disabled = true
+duplicateMessage.hidden = true
 
 addBtn.addEventListener("click", function(){
 
@@ -101,9 +141,19 @@ addBtn.addEventListener("click", function(){
 
 })
 
+
+
+
 input.addEventListener("keydown", function(event){
 
+
+
+    
     if(event.key === "Enter"){
+        
+        
+
+        addBtn.disabled = true
         addTodo()
         saveTos()
         render()
@@ -114,8 +164,29 @@ input.addEventListener("keydown", function(event){
      
 })
 
+input.addEventListener("input", function(){
+
+    const duplicateTodo = todos.some(todo => todo.text.trim().toLowerCase() === (input.value.trim().toLowerCase()))
+           
+            if(duplicateTodo){
+                     duplicateMessage.hidden = false
+            }else{
+                duplicateMessage.hidden = true
+                }
+
+        if(input.value.trim() === "" || duplicateTodo){
+            
+            addBtn.disabled = true
+
+        }else {
+            
+            addBtn.disabled = false
+        }
+
+})
+
 ul.addEventListener("click", function(event){
-    if (event.target.tagName === "INPUT") return
+    
 
         const deletebtn = event.target.closest(".delete-btn")
         if(deletebtn){
@@ -140,6 +211,18 @@ ul.addEventListener("click", function(event){
     
     if(event.target.classList.contains("edit-btn")){
 
+        const li = event.target.closest("li")
+            if (!li) return
+
+        const span = li.querySelector(".text")
+        const input = li.querySelector(".edit")
+        
+       if (input.hidden === false){
+                span.style.display = ""
+                input.hidden = true
+                return
+       }
+
         const inputs = document.querySelectorAll(".edit")
         inputs.forEach(input =>{
             input.hidden = true
@@ -149,34 +232,30 @@ ul.addEventListener("click", function(event){
             texts.forEach(span =>{
                 span.style.display = ""
             })
-        
-
-    const li = event.target.closest("li")
-    if (!li) return
-
-
 
     const id = Number(li.dataset.id)
-    
-
-    const span = li.querySelector(".text")
-    const input = li.querySelector(".edit")
 
     const todo = todos.find(todo => todo.id === id)
     if (!todo) return
+
+    
 
     span.style.display = "none"
     input.hidden = false
 
     input.value = todo.text
     input.focus()
-
+    
     return
           }
     
     
-   
-        const li = event.target.closest("li")
+         if(event.target.classList.contains("checkbox")){
+
+
+
+
+              const li = event.target.closest("li")
         if(li){
 
             const id = Number(li.dataset.id)
@@ -196,7 +275,11 @@ ul.addEventListener("click", function(event){
          return
     
 
-        }   
+        } 
+
+         }
+   
+        
 })
 
 ul.addEventListener("keydown", function(event){
@@ -272,7 +355,9 @@ search.addEventListener("input",function(event){
 
 })
 
+clearsearch.addEventListener("click",function(){
 
-
-
-
+         searchText = ""
+         search.value=""
+         render()
+})
