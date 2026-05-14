@@ -30,6 +30,8 @@ Features:
 * clear completed
 * localStorage persistence
 
+* https://lukyxprograming-11.github.io/javascript-learning/todo-app/
+
 ## Example (earlier practice)
 
 ```js
