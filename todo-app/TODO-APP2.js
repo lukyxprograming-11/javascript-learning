@@ -5,6 +5,8 @@
 let todos = JSON.parse(localStorage.getItem("todos") || "[]") 
 let currentFilter = "all"
 let searchText = ""
+let currentSort= ""
+
 
 //DOM references
 
@@ -21,6 +23,8 @@ const emptyMessage = document.getElementById("emptyMessage")
 const clearsearch = document.getElementById("clearsearch")
 const duplicateMessage = document.getElementById("duplicateMessage")
 const selectPriority = document.getElementById("priority")
+const sortSelect = document.getElementById("sortSelect")
+const searchResultCounter = document.getElementById ("searchResultCounter")
 
 
 function saveTos(){
@@ -33,6 +37,8 @@ localStorage.setItem("todos", JSON.stringify(todos) )
 
 
 }
+
+//funkce na main button 
 
 function addTodo(){
 
@@ -59,8 +65,12 @@ function addTodo(){
 
 }
 
+//funkce na render 
+
 function render(){
             
+//DATA PIPELINE
+
 let filteredTodos 
        if(currentFilter === "all"){
                                 filteredTodos = todos
@@ -73,36 +83,27 @@ let filteredTodos
 
 let searchTodos = filteredTodos.filter(todo => todo.text.toLowerCase().includes(searchText.toLowerCase()))
 
+
 let sortedTodos = searchTodos
+
+
 if(currentFilter === "all"){
         sortedTodos = [...searchTodos].sort((a, b) => a.done - b.done)
 }
 
-if(searchTodos.length === 0 && searchText !=="" ){
-    emptyMessage.hidden = false 
-}else {
-    emptyMessage.hidden =  true
+if(currentSort === "newest"){
+    sortedTodos= [...sortedTodos].sort((a, b) => b.id - a.id)
+}
+
+if(currentSort === "alphabetical"){
+    sortedTodos = [...sortedTodos].sort((a,b)=> a.text.localeCompare(b.text))
 }
 
 
+    let renderTodos = sortedTodos
 
 
-    let renderTodos = searchTodos
-
-    if(currentFilter === "all"){
-   renderTodos = sortedTodos
-    }
-
-    ul.innerHTML = renderTodos.map((todo)=> `<li class="${todo.done? "done" : ""}" data-id="${todo.id}"> 
-                                             <div class="left"><input type="checkbox" class="checkbox" ${todo.done ? "checked" : ""}> ${todo.category ? `<span class="category">${todo.category}</span>` : ""} 
-                                                ${todo.date ? `<span class="date">${todo.date}</span>` : ""} <span class="text">${todo.text}</span> <input class="edit" hidden> ${todo.priority ? `<span class="priority">${todo.priority}</span>` : ""} </div> 
-                                             <div class="right"> <button class="edit-btn" data-id="${todo.id}">✏️</button> <button class="delete-btn" data-id="${todo.id}">X</button></div> </li>`)
-    .join("")
-
-
-     
-
-
+// UI STATE / UI SYNC
 
     document.querySelectorAll(".filter-btn").forEach(btn =>{btn.classList.remove("active")})
 
@@ -112,18 +113,81 @@ if(activeBtn){
     activeBtn.classList.add("active")
 }
 
+if(searchTodos.length === 0 && searchText !=="" ){
+    emptyMessage.hidden = false 
+}else {
+    emptyMessage.hidden =  true
+}
+
     const hasCompleted = todos.some(todo => todo.done)
 
     clearBtn.disabled = !hasCompleted
     clearsearch.disabled = searchText === "" 
-    
-    
 
+//LIST RENDER
+
+ul.innerHTML = renderTodos.map((todo)=>{            //render metadata  
+
+                                                const isOverdue = new Date(todo.date) < new Date() && !todo.done && todo.date
+
+                                                const matchCheck = todo.text.toLowerCase().includes(searchText.toLowerCase())
+                                                const matchIndex = todo.text.toLowerCase().indexOf(searchText.toLowerCase())
+
+                                                //render helper data 
+
+                                                let beforeMatch 
+                                                let Match 
+                                                let afterMatch 
+
+                                                if(searchText !== ""){
+                                                    
+                                                    beforeMatch = todo.text.slice(0, matchIndex)
+                                                    Match = todo.text.slice(matchIndex, matchIndex + searchText.length ) 
+                                                    afterMatch = todo.text.slice(matchIndex + searchText.length,)
+                                                }else{
+                                                    beforeMatch = todo.text
+                                                    Match = ""
+                                                    afterMatch = ""
+                                                }
+                                                
+
+        
+                                        return `<li class="${todo.done? "done" : ""}" data-id="${todo.id}"> 
+
+
+                                             <div class="left"> <div class"main-content"> <input type="checkbox" class="checkbox" ${todo.done ? "checked" : ""}> <span class="text">${beforeMatch}${Match ? `<span class="highlight">${Match}</span>` :"" }${afterMatch}</span> </div>
+                                             
+                                             <div class="metadata"> ${todo.category ? `<span class="category category-${todo.category}">${todo.category}</span>` : ""} 
+                                               ${todo.priority ? `<span class="priority priority-${todo.priority}" >${todo.priority}</span>` : ""}  ${todo.date ? `<span class="date ${isOverdue? "overdue" : ""} ">${todo.date}</span>` : ""} </div>
+                                                <input class="edit" hidden>  </div>
+                                               
+                                               
+
+
+                                             <div class="right"> <button class="edit-btn" data-id="${todo.id}">✏️</button> <button class="delete-btn" data-id="${todo.id}">X</button></div> </li>`} )
+    .join("")
+
+
+//EXTRA UI 
+    
     const complete = todos.filter((todo)=> todo.done)
     const uncomplete = todos.filter((todo)=> !todo.done)
 
     counter.innerHTML= "tasks left: " + uncomplete.length + " | Completed: " + complete.length
 
+    
+    const showSearchCounter = searchText !== ""&& renderTodos.length > 0
+    
+    
+    if(showSearchCounter){
+        searchResultCounter.hidden = false
+        searchResultCounter.innerHTML= "Nalezeno ukolů: " + renderTodos.length
+    }else {
+        searchResultCounter.hidden = true
+    }
+                 
+    
+        
     
 }
 
@@ -132,6 +196,15 @@ if(activeBtn){
 render()
 addBtn.disabled = true
 duplicateMessage.hidden = true
+sortSelect.value=""
+input.value=""
+select.value=""
+dateInput.value=""
+selectPriority.value=""
+search.value=""
+
+
+//add button
 
 addBtn.addEventListener("click", function(){
 
@@ -142,7 +215,7 @@ addBtn.addEventListener("click", function(){
 })
 
 
-
+//main input enter 
 
 input.addEventListener("keydown", function(event){
 
@@ -164,6 +237,8 @@ input.addEventListener("keydown", function(event){
      
 })
 
+//main input text 
+
 input.addEventListener("input", function(){
 
     const duplicateTodo = todos.some(todo => todo.text.trim().toLowerCase() === (input.value.trim().toLowerCase()))
@@ -184,6 +259,8 @@ input.addEventListener("input", function(){
         }
 
 })
+
+//ul na delete edit a checkbox v li neboli v todo 
 
 ul.addEventListener("click", function(event){
     
@@ -245,6 +322,7 @@ ul.addEventListener("click", function(event){
 
     input.value = todo.text
     input.focus()
+    input.select()
     
     return
           }
@@ -282,6 +360,8 @@ ul.addEventListener("click", function(event){
         
 })
 
+//input v li na edit a na odchod z inputu přes esc 
+
 ul.addEventListener("keydown", function(event){
 
     if (event.target.tagName !== "INPUT") return
@@ -318,11 +398,12 @@ ul.addEventListener("keydown", function(event){
         span.style.display = ""
         
         return
-        console.log("ESC")
     }
 
     
 })
+
+//filter na currentFilter 
 
 filters.addEventListener("click", function(event){
 
@@ -335,6 +416,8 @@ filters.addEventListener("click", function(event){
 
 })
 
+//tlačítko na smazání všech completed todo 
+
 clearBtn.addEventListener("click", function(){
 
   const activeTodos=  todos.filter(function(todo) {
@@ -346,6 +429,7 @@ todos = activeTodos
         render()
 })
 
+//vyhledávací input 
 
 search.addEventListener("input",function(event){
 
@@ -355,9 +439,21 @@ search.addEventListener("input",function(event){
 
 })
 
+//mazání vyhledávacího inputu
+
 clearsearch.addEventListener("click",function(){
 
          searchText = ""
          search.value=""
          render()
+})
+
+//řazení todo podle id 
+
+sortSelect.addEventListener("change", function(){
+
+    currentSort = sortSelect.value
+    
+    render()
+
 })

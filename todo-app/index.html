@@ -1,44 +1,93 @@
 <html lang="cz">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <title>Todo list</title>
     <link rel="stylesheet" href="todo-list.css">
 </head>
 <body>
-    <div class="container">
+<div class="container">
         <h2>To Do List</h2>
-       
-<input placeholder="Zadej úkol" type="text" id="todoInput"> <select id="category"> 
-    <option value="" selected>Vybrat kategorii</option>
-  <option value="work">Work</option>
-  <option value="home">Home</option>
-  <option value="other">Other</option>
-</select>  
 
-<select id="priority">
-    <option value="" selected>Vybrat Prioritu</option>
-    <option value="low">Nízká</option>
-    <option value="medium">Střední</option>
-    <option value="hight">Vysoká</option>
-</select>
+    <div class="create-section">
+        <div class="create-row">
+            <input placeholder="Zadej úkol" type="text" id="todoInput"> 
 
-<input type="date" id="date" >
+                <div class="metadata-controls">
 
+                    <select id="category"> 
+                        <option value="" selected>Vybrat kategorii</option>
+                        <option value="work">Work</option>
+                        <option value="home">Home</option>
+                        <option value="other">Other</option>
+                    </select>  
 
+                    <select id="priority">
+                        <option value="" selected>Vybrat Prioritu</option>
+                        <option value="low">Nízká</option>
+                        <option value="medium">Střední</option>
+                        <option value="high">Vysoká</option>
+                    </select>
 
-<button id="addBtn" class="add-btn">Přidat</button>
-<p id="duplicateMessage" class="duplicateMessage">Úkol vytvořen</p>
-<input placeholder="Vyhledej úkol" type="text" id="search"> 
-<button id="clearsearch" class="clearsearch">Smazat search</button>
-<button id="clearBtn" class="clearBtn">Smazat completed</button> 
+                   
+                    
+                </div>
 
+                 <div class="data-actions">
+                    <input type="date" id="date" >
+                    <button id="addBtn" class="add-btn">Přidat</button>
+                </div>
 
-<div class="filters">
-  <button class="filter-btn" data-filter="all">All</button>
-  <button class="filter-btn" data-filter="active">Active</button>
-  <button class="filter-btn" data-filter="completed">Completed</button>
-</div> <p id="emptyMessage">Žádné úkoly nenalezeny</p> 
+        </div>
+
+        <div class="create-feedback">
+
+            <p id="duplicateMessage" class="duplicateMessage">Úkol již existuje</p>
+        </div>    
+
+    </div>
+
+    <div class="search-section">
+        
+        <div class="search-row">
+            <input placeholder="Vyhledej úkol" type="text" id="search"> 
+
+            
+            <div class="search-controls">
+
+                <select id="sortSelect">
+                    <option value="">Vybrat filter</option>
+                    <option value="newest">Nejnovější</option>
+                    <option value="old">Nejstarší</option>
+                    <option value="alphabetical">Abecedně</option>
+    
+                </select>
+
+            </div>
+              
+                <div class="search-actions">
+
+                    <button id="clearsearch" class="clearsearch">Smazat search</button>
+                    <button id="clearBtn" class="clearBtn">Smazat completed</button> 
+
+                </div>
+
+        </div>
+
+        <div class="search-feedback">
+
+            <p id="emptyMessage" class="emptyMessage">Žádné úkoly nenalezeny</p> <p id="searchResultCounter" class="searchResultCounter"></p>
+
+        </div>
+
+    </div>
+
+    <div class="filters">
+    <button class="filter-btn" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="active">Active</button>
+    <button class="filter-btn" data-filter="completed">Completed</button>
+    </div> 
 
 
 <ul id="todoList"></ul>
