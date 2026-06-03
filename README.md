@@ -1,52 +1,115 @@
-# JavaScript Learning
+# JavaScript Learning Journey
 
-This repository tracks my progress in learning JavaScript through practical projects and exercises.
+This repository tracks my progress in learning frontend development with vanilla JavaScript through practical projects and architecture-focused problem solving.
+
+## Main Project
+
+### Todo App (Vanilla JavaScript)
+
+Live Demo:
+https://lukyxprograming-11.github.io/javascript-learning/todo-app/
 
 ## Current Focus
 
-* Building a Todo App in vanilla JavaScript
-* Understanding application flow: event → state → render → UI
-* Working with array methods (`filter`, `map`, `find`)
-* Managing state and localStorage
+The main goal of this project is not only building features, but understanding application architecture and UI flow:
 
-## Skills Covered
+```txt
+event → state → render → UI
+```
 
-* loops and conditions
-* arrays and data transformations
-* functions and composition
-* filtering and aggregation (sum, count, average)
-* debugging and problem solving
+I focus heavily on:
 
-## Projects
+* render pipeline thinking
+* derived state
+* dataset transformations
+* conditional rendering
+* UI state separation
+* responsive layout structure
+* debugging and architecture reasoning
 
-### Todo App (in progress)
+---
 
-Features:
+## Features
 
-* add todo
-* delete todo
-* toggle completed
-* filter (all / active / completed)
+### Core Todo Features
+
+* add / edit / delete todos
+* toggle completed state
+* duplicate validation
 * clear completed
 * localStorage persistence
 
-* https://lukyxprograming-11.github.io/javascript-learning/todo-app/
+### Filtering & Search
 
-## Example (earlier practice)
+* filter todos (all / active / completed)
+* category filtering
+* search functionality
+* sorting system
+* active search highlighting
 
-```js
-analyzeNumbers([3, 12, 7, 20], transformNumber)
+### Render & State Architecture
 
-Result:
-{
-  result: [24, 21, 40],
-  sum: 85,
-  count: 3,
-  average: 28.33
-}
-```
+* render pipeline structure
+* derived render datasets
+* conditional element rendering
+* render metadata helpers
+* string render transformations
+* index-based text processing
+
+### UX Features
+
+* Enter / Escape keyboard UX
+* edit mode
+* overdue todo styling
+* responsive design (desktop / tablet / mobile)
+
+### Statistics Section
+
+* active todos counter
+* completed todos counter
+* overdue todos counter
+
+---
+
+## Skills Practiced
+
+### JavaScript
+
+* arrays and data transformations
+* filtering, sorting and aggregation
+* functions and composition
+* event delegation
+* conditional rendering
+* debugging and state management
+
+### Frontend Architecture
+
+* separating state vs UI state
+* render flow organization
+* reusable render patterns
+* progressive dataset narrowing
+* metadata-driven UI rendering
+
+### CSS / Responsive UI
+
+* responsive layouts
+* mobile and tablet adjustments
+* visual hierarchy
+* section-based UI structure
+* spacing and UI grouping
+
+---
 
 ## Goal
 
-Move from “it works” → to understanding how and why it works.
+Move from:
 
+```txt
+"it works"
+```
+
+to:
+
+```txt
+"I understand why it works and how the architecture flows."
+```
