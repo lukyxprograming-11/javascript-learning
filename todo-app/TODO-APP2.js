@@ -6,6 +6,7 @@ let todos = JSON.parse(localStorage.getItem("todos") || "[]")
 let currentFilter = "all"
 let searchText = ""
 let currentSort= ""
+let currentCategoryFilter = ""
 
 
 //DOM references
@@ -25,6 +26,7 @@ const duplicateMessage = document.getElementById("duplicateMessage")
 const selectPriority = document.getElementById("priority")
 const sortSelect = document.getElementById("sortSelect")
 const searchResultCounter = document.getElementById ("searchResultCounter")
+const categoryfilter = document.getElementById("category-filter")
 
 
 function saveTos(){
@@ -81,7 +83,17 @@ let filteredTodos
                                     filteredTodos = todos.filter(todo => todo.done)
                                 }
 
-let searchTodos = filteredTodos.filter(todo => todo.text.toLowerCase().includes(searchText.toLowerCase()))
+
+let categoryTodos = filteredTodos
+
+if(currentCategoryFilter === ""){
+                                categoryTodos = filteredTodos
+
+}else if(currentCategoryFilter !==""){
+    categoryTodos = filteredTodos.filter(todo => currentCategoryFilter === todo.category)
+}
+
+let searchTodos = categoryTodos.filter(todo => todo.text.toLowerCase().includes(searchText.toLowerCase()))
 
 
 let sortedTodos = searchTodos
@@ -155,7 +167,7 @@ ul.innerHTML = renderTodos.map((todo)=>{            //render metadata
                                         return `<li class="${todo.done? "done" : ""}" data-id="${todo.id}"> 
 
 
-                                             <div class="left"> <div class"main-content"> <input type="checkbox" class="checkbox" ${todo.done ? "checked" : ""}> <span class="text">${beforeMatch}${Match ? `<span class="highlight">${Match}</span>` :"" }${afterMatch}</span> </div>
+                                             <div class="left"> <div class="main-content"> <input type="checkbox" class="checkbox" ${todo.done ? "checked" : ""}> <span class="text">${beforeMatch}${Match ? `<span class="highlight">${Match}</span>` :"" }${afterMatch}</span> </div>
                                              
                                              <div class="metadata"> ${todo.category ? `<span class="category category-${todo.category}">${todo.category}</span>` : ""} 
                                                ${todo.priority ? `<span class="priority priority-${todo.priority}" >${todo.priority}</span>` : ""}  ${todo.date ? `<span class="date ${isOverdue? "overdue" : ""} ">${todo.date}</span>` : ""} </div>
@@ -172,8 +184,9 @@ ul.innerHTML = renderTodos.map((todo)=>{            //render metadata
     
     const complete = todos.filter((todo)=> todo.done)
     const uncomplete = todos.filter((todo)=> !todo.done)
+    const overdue = todos.filter((todo)=> new Date(todo.date) < new Date() && !todo.done && todo.date)
 
-    counter.innerHTML= "tasks left: " + uncomplete.length + " | Completed: " + complete.length
+    counter.innerHTML= "tasks left: " + uncomplete.length + " | Completed: " + complete.length + " | Po termínu: " + overdue.length
 
     
     const showSearchCounter = searchText !== ""&& renderTodos.length > 0
@@ -454,6 +467,15 @@ sortSelect.addEventListener("change", function(){
 
     currentSort = sortSelect.value
     
+    render()
+
+})
+
+categoryfilter.addEventListener("change", function(){
+
+
+    currentCategoryFilter = categoryfilter.value
+
     render()
 
 })

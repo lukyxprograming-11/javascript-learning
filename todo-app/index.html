@@ -87,11 +87,25 @@
     <button class="filter-btn" data-filter="all">All</button>
     <button class="filter-btn" data-filter="active">Active</button>
     <button class="filter-btn" data-filter="completed">Completed</button>
+    
+
+    <select id="category-filter">
+
+        <option value="" selected>filtrovat kategorii</option>
+        <option value="work">Work</option>
+                        <option value="home">Home</option>
+                        <option value="other">Other</option>
+        
+    </select>
+
     </div> 
 
 
 <ul id="todoList"></ul>
+<div class="stats-section">
+    <h2 class="title-stats">Statistiky</h2>
 <p id="counter" class="counter"></p>
+</div>
     </div>
 
 <script src="TODO-APP2.js"></script>
